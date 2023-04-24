@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "scripts": {
+    "format": "elm-format src",
+    "start": "elm-doc-preview",
+    "review": "elm-review --fix",
+    "test": "elm-review && elm-format --validate src && elm-verify-examples -r && elm make --docs=/tmp/docs.json"
+  },
+  "devDependencies": {
+    "@elm-tooling/elm-language-server": "^2.6.0",
+    "elm-doc-preview": "^5.0.5",
+    "elm-format": "^0.8.7",
+    "elm-review": "^2.10.1",
+    "elm-verify-examples": "^5.2.0"
+  },
+  "dependencies": {
+    "elm": "^0.19.1-5"
+  }
+}
