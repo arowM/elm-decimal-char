@@ -35,7 +35,7 @@ isBasicLatin c =
     0x30 <= codepoint && codepoint <= 0x39
 
 
-{-| Check if a character is decimal (i.e., \`Numeric\_Type=Decimal).
+{-| Check if a character is decimal (i.e., `Numeric_Type=Decimal`).
 
     isNumeral '3'
     --> True
@@ -63,6 +63,7 @@ If the character is not decimal, it returns `Nothing`.
     toBasicLatin '３'
     --> Just '3'
 
+    -- Arabic numeral representing '9'
     toBasicLatin '٩'
     --> Just '9'
 
