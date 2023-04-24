@@ -1,18 +1,20 @@
 module DecimalChar exposing
-    ( isNumeral
+    ( isDecimal
     , isBasicLatin
     , toBasicLatin
-    , normalize
+    , normalizeAsDigits
+    , normalizeAsText
     )
 
 {-| Provide functions to handle Unicode decimal characters, which are listed in [DerivedNumericType-15.0.0.txt](https://www.unicode.org/Public/15.0.0/ucd/extracted/DerivedNumericType.txt) as `Numeric_Type=Decimal`.
 
 You can use this library to normalize user inputs, which will free users from the hassle of entering numbers in the "correct" format.
 
-@docs isNumeral
+@docs isDecimal
 @docs isBasicLatin
 @docs toBasicLatin
-@docs normalize
+@docs normalizeAsDigits
+@docs normalizeAsText
 
 -}
 
@@ -37,22 +39,22 @@ isBasicLatin c =
 
 {-| Check if a character is decimal (i.e., `Numeric_Type=Decimal`).
 
-    isNumeral '3'
+    isDecimal '3'
     --> True
 
-    isNumeral '３'
+    isDecimal '３'
     --> True
 
-    isNumeral '🐐'
+    isDecimal '🐐'
     --> False
 
     -- Roman digit is numeric, but not decimal.
-    isNumeral 'Ⅵ'
+    isDecimal 'Ⅵ'
     --> False
 
 -}
-isNumeral : Char -> Bool
-isNumeral c =
+isDecimal : Char -> Bool
+isDecimal c =
     toBasicLatin c /= Nothing
 
 
@@ -337,14 +339,14 @@ toBasicLatin c =
         Nothing
 
 
-{-| Extract only the decimal characters contained in a given string and convert them to the corresponding Basic Latin characters.
+{-| Extract only the decimal characters contained in a given string, and convert them to the corresponding Basic Latin characters.
 
-    normalize "０１２３🐐４５٩🌱"
+    normalizeAsDigits "０１２３🐐４５٩🌱"
     --> "0123459"
 
 -}
-normalize : String -> String
-normalize =
+normalizeAsDigits : String -> String
+normalizeAsDigits =
     String.foldr
         (\c acc ->
             case toBasicLatin c of
@@ -355,3 +357,22 @@ normalize =
                     String.cons digit acc
         )
         ""
+
+
+{-| Similar to `normalizeAsDigits`, but `normalizeAsText` leaves non-decimal characters as they are.
+
+    normalizeAsText "０１２３🐐４５٩🌱"
+    --> "0123🐐459🌱"
+
+-}
+normalizeAsText : String -> String
+normalizeAsText =
+    String.map
+        (\c ->
+            case toBasicLatin c of
+                Nothing ->
+                    c
+
+                Just digit ->
+                    digit
+        )
